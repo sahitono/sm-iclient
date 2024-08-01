@@ -1,7 +1,7 @@
 {
-  "name": "@sahitono-iclient/monorepo",
+  "name": "sahitono-iclient",
   "type": "module",
-  "version": "0.9.1-alpha.1",
+  "version": "0.10.0",
   "packageManager": "pnpm@9.6.0",
   "description": "",
   "author": "",
