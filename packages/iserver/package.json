@@ -1,5 +1,5 @@
 {
-  "name": "@sahitono-iclient/iserver",
+  "name": "@type-iclient/iserver",
   "version": "0.10.0",
   "description": "",
   "author": "",
@@ -45,7 +45,7 @@
     "bundle": "esbuild --bundle src/index.ts --outfile=dist/index.bundle.js --format=esm",
     "bundle:browser": "esbuild src/index.ts  --outfile=dist/index.bundle.js --bundle --minify --sourcemap",
     "build": "unbuild",
-    "prepublishOnly": "tsc",
+    "prepublishOnly": "unbuild",
     "check": "tsc --noEmit -p ./tsconfig.json"
   },
   "dependencies": {

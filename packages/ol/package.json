@@ -1,5 +1,5 @@
 {
-  "name": "@sahitono-iclient/ol",
+  "name": "@type-iclient/ol",
   "version": "0.10.0",
   "description": "",
   "author": "",
@@ -29,7 +29,7 @@
     "bundle": "esbuild --bundle src/index.ts --outfile=dist/index.bundle.js --format=esm",
     "bundle:browser": "esbuild dist/index.js  --outfile=dist/index.bundle.js --bundle --minify --sourcemap",
     "build": "unbuild",
-    "prepublishOnly": "tsc -p ./tsconfig.json"
+    "prepublishOnly": "unbuild"
   },
   "dependencies": {
     "@sahitono-iclient/iserver": "workspace:*",
