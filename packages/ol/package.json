@@ -32,7 +32,7 @@
     "prepublishOnly": "unbuild"
   },
   "dependencies": {
-    "@sahitono-iclient/iserver": "workspace:*",
+    "@type-iclient/iserver": "workspace:*",
     "ol": "^10.0.0"
   },
   "devDependencies": {

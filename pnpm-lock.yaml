@@ -15,10 +15,10 @@ importers:
       '@antfu/eslint-config':
         specifier: ^2.24.1
         version: 2.24.1(eslint-plugin-format@0.1.2(eslint@9.8.0))(eslint@9.8.0)(typescript@5.5.4)
-      '@sahitono-iclient/iserver':
+      '@type-iclient/iserver':
         specifier: workspace:^*
         version: link:packages/iserver
-      '@sahitono-iclient/ol':
+      '@type-iclient/ol':
         specifier: workspace:^*
         version: link:packages/ol
       bumpp:
@@ -67,7 +67,7 @@ importers:
 
   packages/ol:
     dependencies:
-      '@sahitono-iclient/iserver':
+      '@type-iclient/iserver':
         specifier: workspace:*
         version: link:../iserver
       ol:
