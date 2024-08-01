@@ -1,5 +1,5 @@
 // bump.config.ts
-import { defineConfig } from 'bumpp'
+import { defineConfig } from "bumpp"
 
 export default defineConfig({
   recursive: true,

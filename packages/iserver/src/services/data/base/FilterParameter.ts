@@ -10,13 +10,13 @@ export interface FilterParameter {
 
 export function filterToQueryParameter(
   parameter: BaseDataParameter,
-  filter: FilterParameter
+  filter: FilterParameter,
 ): QueryParameter {
   return {
     name: `${parameter.dataset}@${parameter.datasource}`,
     attributeFilter: filter.where,
     fields: filter.select ?? undefined,
     ...(filter.orderBy && { orderBy: filter.orderBy }),
-    ...(filter.groupBy && { orderBy: filter.groupBy })
+    ...(filter.groupBy && { orderBy: filter.groupBy }),
   } as QueryParameter
 }

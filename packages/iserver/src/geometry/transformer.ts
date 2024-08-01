@@ -9,21 +9,19 @@ import type {
   LineString,
   MultiLineString,
   MultiPolygon,
-  Point
 } from "geojson"
 import { get, range } from "radash"
-import { parseString } from "../utils/type-cast"
+import { parseString } from "../utils"
 
 import { GeometryType as SmGeometryType } from "../sm/geometry/Geometry"
-import { SmPoint as SmPointAny } from "../sm/geometry/Point2D"
-import type { Geometry, Line as SmLine, Point as SmPoint, Region as SmRegion } from "../sm/geometry/Geometry"
+import type { Point2D, SmPoint as SmPointAny } from "../sm/geometry/Point2D"
+import type { Geometry, Line as SmLine, Region as SmRegion } from "../sm/geometry/Geometry"
 import type { Feature } from "../sm/common/Features"
-import type { Point2D } from "../sm/geometry/Point2D"
 
 type TransformerFromSmFn = (geom: Geometry) => GeoJSONGeometry
 
 export function smPoint2GeoJSON(point: SmPointAny): number[] {
-  if(Object.hasOwn(point, "z")) {
+  if (Object.hasOwn(point, "z")) {
     return [point.x, point.y, get(point, "z")]
   }
 
@@ -40,7 +38,7 @@ export const smGeometry2geojson: Record<SmGeometryType, TransformerFromSmFn> = {
   },
   REGION(geom: Geometry): GeoJSONPolygon | MultiPolygon {
     if (geom.parts.length === 1) {
-      return { type: "Polygon", coordinates: [ geom.points.map((p) => smPoint2GeoJSON(p)) ] }
+      return { type: "Polygon", coordinates: [geom.points.map(p => smPoint2GeoJSON(p))] }
     }
 
     const multi: MultiPolygon = { type: "MultiPolygon", coordinates: [] }
@@ -51,7 +49,7 @@ export const smGeometry2geojson: Record<SmGeometryType, TransformerFromSmFn> = {
       const pg: GeoJSONPosition[][] = [
         geom.points.slice(i, i + part).map((c) => {
           return smPoint2GeoJSON(c)
-        })
+        }),
       ]
 
       i += part
@@ -73,14 +71,14 @@ export const smGeometry2geojson: Record<SmGeometryType, TransformerFromSmFn> = {
   },
   LINE(geom: Geometry): LineString | MultiLineString {
     if (geom.parts.length === 1) {
-      return { type: "LineString", coordinates: geom.points.map((p) => smPoint2GeoJSON(p)) }
+      return { type: "LineString", coordinates: geom.points.map(p => smPoint2GeoJSON(p)) }
     }
 
     const multi: MultiLineString = { type: "MultiLineString", coordinates: [] }
 
     let i = 0
     for (const part of geom.parts) {
-      const line: GeoJSONPosition[] = geom.points.slice(i, i + part).map((p) => smPoint2GeoJSON(p))
+      const line: GeoJSONPosition[] = geom.points.slice(i, i + part).map(p => smPoint2GeoJSON(p))
       i += part
 
       multi.coordinates.push(line)
@@ -90,12 +88,12 @@ export const smGeometry2geojson: Record<SmGeometryType, TransformerFromSmFn> = {
   },
   LINE3D(geom: Geometry) {
     return this.LINE(geom)
-  }
+  },
 }
 
 export function toGeoJSON<G extends GeoJSONGeometry | null = GeoJSONGeometry, P = GeoJsonProperties>(
   features: Feature[],
-  typeCast = true
+  typeCast = true,
 ): FeatureCollection<G, P> {
   const geojson: FeatureCollection = { type: "FeatureCollection", features: [] }
 
@@ -103,7 +101,7 @@ export function toGeoJSON<G extends GeoJSONGeometry | null = GeoJSONGeometry, P 
     let geom: GeoJSONGeometry = {} as GeoJSONGeometry
     if (f.geometry != null) {
       const gt = f.geometry.type
-      if(!Object.hasOwn(smGeometry2geojson, gt)) {
+      if (!Object.hasOwn(smGeometry2geojson, gt)) {
         throw new Error(`Unsupported geometry : ${gt}`)
       }
       geom = smGeometry2geojson[gt](f.geometry)
@@ -120,21 +118,14 @@ export function toGeoJSON<G extends GeoJSONGeometry | null = GeoJSONGeometry, P 
 
   return geojson as FeatureCollection<G, P>
 }
+type TransformerFn<G extends GeoJSONGeometry = GeoJSONGeometry> = (geom: G) => Geometry
 
-// type SupportedGeometry = GeoJSONPoint | LineString | MultiLineString | GeoJSONPolygon | MultiPolygon
-// : Record<
-//   string,
-//   (geom: SupportedGeometry) => SmGeometry<SmGeometryType.LINE | SmGeometryType.POINT | SmGeometryType.REGION>
-// >
-
-// type TransformerToSmFn<G extends GeoJSONGeometry = GeoJSONGeometry> = (geom: G) => Geometry
-
-export const geojsonGeometry2sm = {
-  POINT: (geom: Point): SmPoint => {
+export const geojsonGeometry2sm: Record<string, TransformerFn<any>> = {
+  POINT(geom) {
     return {
       center: {
         x: geom.coordinates[0],
-        y: geom.coordinates[1]
+        y: geom.coordinates[1],
       },
       type: SmGeometryType.POINT,
       parts: [1],
@@ -142,7 +133,7 @@ export const geojsonGeometry2sm = {
       style: null,
       prjCoordSys: null,
       id: 1,
-      points: [{ x: geom.coordinates[0], y: geom.coordinates[1] }]
+      points: [{ x: geom.coordinates[0], y: geom.coordinates[1] }],
     }
   },
   LINESTRING(geom: LineString): SmLine {
@@ -157,14 +148,14 @@ export const geojsonGeometry2sm = {
 
       points.push({
         x: vertex[0],
-        y: vertex[1]
+        y: vertex[1],
       })
     }
 
     return {
       center: {
         x: (Math.max(...xs) + Math.min(...xs)) / xs.length,
-        y: (Math.max(...ys) + Math.min(...ys)) / ys.length
+        y: (Math.max(...ys) + Math.min(...ys)) / ys.length,
       },
       type: SmGeometryType.LINE,
       parts: [geom.coordinates.length],
@@ -172,14 +163,14 @@ export const geojsonGeometry2sm = {
       style: null,
       prjCoordSys: null,
       id: 1,
-      points
+      points,
     }
   },
   MULTILINESTRING(geom: MultiLineString): SmLine {
     const geo: SmLine = {
       center: {
         x: 0,
-        y: 0
+        y: 0,
       },
       type: SmGeometryType.LINE,
       parts: [],
@@ -187,7 +178,7 @@ export const geojsonGeometry2sm = {
       style: null,
       prjCoordSys: null,
       id: 1,
-      points: []
+      points: [],
     }
 
     const xs: number[] = []
@@ -205,7 +196,7 @@ export const geojsonGeometry2sm = {
 
         geo.points.push({
           x: vertex[0],
-          y: vertex[1]
+          y: vertex[1],
         })
 
         geo.parts[i] += 1
@@ -227,7 +218,7 @@ export const geojsonGeometry2sm = {
     const geo: SmRegion = {
       center: {
         x: center[0] / geom.coordinates[0].length,
-        y: center[1] / geom.coordinates[0].length
+        y: center[1] / geom.coordinates[0].length,
       },
       type: SmGeometryType.REGION,
       parts: [],
@@ -235,7 +226,7 @@ export const geojsonGeometry2sm = {
       style: null,
       prjCoordSys: null,
       id: 1,
-      points: []
+      points: [],
     }
 
     let i = 0
@@ -249,7 +240,7 @@ export const geojsonGeometry2sm = {
 
         geo.points.push({
           x: c[0],
-          y: c[1]
+          y: c[1],
         })
       }
 
@@ -262,7 +253,7 @@ export const geojsonGeometry2sm = {
     const geo: SmRegion = {
       center: {
         x: 0,
-        y: 0
+        y: 0,
       },
       type: SmGeometryType.REGION,
       parts: [],
@@ -270,7 +261,7 @@ export const geojsonGeometry2sm = {
       style: null,
       prjCoordSys: null,
       id: 1,
-      points: []
+      points: [],
     }
 
     let i = 0
@@ -288,7 +279,7 @@ export const geojsonGeometry2sm = {
 
           geo.points.push({
             x: c[0],
-            y: c[1]
+            y: c[1],
           })
         }
 
@@ -298,5 +289,5 @@ export const geojsonGeometry2sm = {
     }
 
     return geo
-  }
+  },
 }

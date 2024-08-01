@@ -1,5 +1,5 @@
 export function isNumeric(num: any) {
-  return (typeof num === "number" || (typeof num === "string" && num.trim() !== "")) && !isNaN(num as number)
+  return (typeof num === "number" || (typeof num === "string" && num.trim() !== "")) && !Number.isNaN(num as number)
 }
 
 export function parseString(val: string): string | number {
@@ -7,5 +7,5 @@ export function parseString(val: string): string | number {
     return val
   }
 
-  return parseFloat(val)
+  return Number.parseFloat(val)
 }

@@ -6,5 +6,5 @@ export enum GetFeatureMode {
   ID = "ID",
   SPATIAL = "SPATIAL",
   SPATIAL_ATTRIBUTEFILTER = "SPATIAL_ATTRIBUTEFILTER",
-  SQL = "SQL"
+  SQL = "SQL",
 }

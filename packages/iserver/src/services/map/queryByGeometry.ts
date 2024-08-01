@@ -4,7 +4,7 @@ import type { Geometry as SmGeometry } from "../../sm/geometry"
 import { geojsonGeometry2sm, toGeoJSON } from "../../geometry/transformer"
 import type { MapResponse } from "../../sm/map"
 import { SpatialQueryMode } from "../../sm/common/SpatialQueryMode"
-import { type BaseParameter, parseBaseParameter } from "../base/parameter"
+import { type BaseParameter, parseBaseParameter } from "../base"
 
 export interface QueryByGeometryParameter extends BaseParameter {
   url: string
@@ -20,16 +20,13 @@ export async function queryByGeometry(param: QueryByGeometryParameter) {
     throw new Error("Not supported yet")
   }
 
-  /**
-   * geomtype is an uppercase version
-   * @ts-expect-error */
   const queryGeom: SmGeometry = geojsonGeometry2sm[geomType](param.geometry)
 
   const res = await ky
     .post(`${param.url}/queryResults.json`, {
       searchParams: {
         returnContent: true,
-        ...parseBaseParameter(param)
+        ...parseBaseParameter(param),
       },
       json: {
         queryMode: "SpatialQuery",
@@ -45,17 +42,17 @@ export async function queryByGeometry(param: QueryByGeometryParameter) {
           startRecord: 0,
           holdTime: 10,
           returnCustomResult: false,
-          returnFeatureWithFieldCaption: false
+          returnFeatureWithFieldCaption: false,
         },
         spatialQueryMode: param?.queryMode ?? SpatialQueryMode.INTERSECT,
-        geometry: queryGeom
-      }
+        geometry: queryGeom,
+      },
     })
     .json<MapResponse>()
 
   const collection: FeatureCollection = {
     type: "FeatureCollection",
-    features: []
+    features: [],
   }
 
   for (const recordset of res.recordsets) {

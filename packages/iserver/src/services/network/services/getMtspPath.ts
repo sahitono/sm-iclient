@@ -2,7 +2,7 @@ import ky from "ky"
 import type { NetworkAnalystResultResponse } from "../base/response"
 import type { BaseNetworkParameter, TransportationAnalystParameter } from "../base/parameter"
 import type { Point2D } from "../../../sm/geometry"
-import { parseBaseParameter } from "../../../services/base/parameter"
+import { parseBaseParameter } from "../../base"
 
 export interface GetMtspPathParameter extends BaseNetworkParameter {
   nodes: Point2D[]
@@ -21,8 +21,8 @@ export async function getMtspPath(url: string, params: GetMtspPathParameter) {
         centers: JSON.stringify(params.centers),
         isAnalyzeById: params?.isAnalyzeById ?? false,
         hasLeastTotalCost: params?.hasLeastTotalCost ?? false,
-        ...parseBaseParameter(params)
-      }
+        ...parseBaseParameter(params),
+      },
     })
     .json<NetworkAnalystResultResponse>()
 }

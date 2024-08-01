@@ -1,4 +1,4 @@
-import type { Geometry } from "../geometry/Geometry"
+import type { Geometry } from "../geometry"
 
 export interface Feature {
   ID: number

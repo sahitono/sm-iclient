@@ -1,15 +1,19 @@
 {
-  "name": "@sm-iclient/ol",
+  "name": "@sahitono-iclient/ol",
   "version": "0.9.0-alpha.1",
   "description": "",
-  "main": "./dist/index.js",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
   "exports": {
-    "./*": "./dist/*.js",
-    "./geometry": "./dist/geometry",
-    "./services": "./dist/services",
-    "./utils": "./dist/utils",
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
   },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
@@ -17,7 +21,6 @@
       ]
     }
   },
-  "types": "./dist/index.d.ts",
   "files": [
     "dist/"
   ],
@@ -25,24 +28,15 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "bundle": "esbuild --bundle src/index.ts --outfile=dist/index.bundle.js --format=esm",
     "bundle:browser": "esbuild dist/index.js  --outfile=dist/index.bundle.js --bundle --minify --sourcemap",
-    "build": "tsc",
+    "build": "unbuild",
     "prepublishOnly": "tsc -p ./tsconfig.json"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@sm-iclient/iserver": "workspace:*",
-    "ol": "^8.2.0"
+    "@sahitono-iclient/iserver": "workspace:*",
+    "ol": "^10.0.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.2.1",
-    "@types/geojson": "^7946.0.13",
-    "esbuild": "^0.19.8",
-    "eslint": "^8.55.0",
-    "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.1.0",
-    "tsc-alias": "^1.8.8",
-    "typescript": "^5.3.2"
+    "@antfu/eslint-config": "^2.24.1",
+    "@types/geojson": "^7946.0.14"
   }
 }

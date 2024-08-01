@@ -1,8 +1,8 @@
 import type { Options as KyOptions } from "ky"
 import ky from "ky"
 import type { FeatureCollection, Geometry as GeoJSONGeometry, GeoJsonProperties } from "geojson"
-import type { BaseDataParameter } from "../base/BaseParameter"
-import { parseBaseParameter } from "../../base/parameter"
+import type { BaseDataParameter } from "../base"
+import { parseBaseParameter } from "../../base"
 
 export interface GetAllParameter extends BaseDataParameter { }
 
@@ -11,12 +11,12 @@ export interface GetAllParameter extends BaseDataParameter { }
  * @param url iServer Data Service Base URL
  * @param options
  * @param kyOptions
- * @returns
+ * @returns Promise<FeatureCollection>
  */
 export async function getAll<G extends GeoJSONGeometry | null = GeoJSONGeometry, P = GeoJsonProperties>(
   url: string,
   options: GetAllParameter,
-  kyOptions: KyOptions = {}
+  kyOptions: KyOptions = {},
 ) {
   return await ky
     .get(`${url}/datasources/${options.datasource}/datasets/${options.dataset}/features.geojson`, {
@@ -25,8 +25,8 @@ export async function getAll<G extends GeoJSONGeometry | null = GeoJSONGeometry,
         returnContent: true,
         fromIndex: options.fromIndex ?? 0,
         toIndex: options.toIndex ?? -1,
-        ...parseBaseParameter(options)
-      }
+        ...parseBaseParameter(options),
+      },
     })
     .json<FeatureCollection<G, P>>()
 }

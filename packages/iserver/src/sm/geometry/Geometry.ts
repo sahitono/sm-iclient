@@ -1,5 +1,3 @@
-// type GeometryType = "POINT" | "LINE" | "REGION"
-
 import type { PrjCoordSys } from "../common/PrjCoordSys"
 import type { SmPoint } from "./Point2D"
 
@@ -9,7 +7,7 @@ export enum GeometryType {
   LINE = "LINE",
   LINE3D = "LINE3D",
   REGION = "REGION",
-  REGION3D = "REGION3D"
+  REGION3D = "REGION3D",
 }
 
 export interface Geometry<T extends GeometryType = GeometryType> {

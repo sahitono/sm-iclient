@@ -1,4 +1,4 @@
-import type { BaseParameter } from "../../base/parameter"
+import type { BaseParameter } from "../../base"
 
 export interface BaseNetworkParameter extends BaseParameter { }
 

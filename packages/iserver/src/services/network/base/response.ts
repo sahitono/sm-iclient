@@ -1,8 +1,8 @@
-import type {Geometry, Line, Region} from "../../../sm/geometry/Geometry"
-import {Bounds} from "../../../sm/geometry/Bounds";
-import {Feature} from "../../../sm/common/Features";
-import {Point2D} from "../../../sm/geometry";
-import {PrjCoordSys} from "../../../sm/common/PrjCoordSys";
+import type { Geometry, Line, Point2D, Region } from "../../../sm/geometry"
+import type { Bounds } from "../../../sm/geometry/Bounds"
+import type { Feature } from "../../../sm/common/Features"
+
+import type { PrjCoordSys } from "../../../sm/common/PrjCoordSys"
 
 export type DirectionType =
   "EAST" |

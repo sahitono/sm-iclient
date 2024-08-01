@@ -1,5 +1,5 @@
 import type { FeatureResultPayload, GetFeatureMode } from "../../../sm/data"
-import type { BaseParameter } from "../../base/parameter"
+import type { BaseParameter } from "../../base"
 
 export interface BaseDataParameter extends BaseParameter {
   dataset: string
@@ -13,13 +13,13 @@ export interface BaseDataParameter extends BaseParameter {
 
 export function toFeatureResultPayload(
   options: BaseDataParameter,
-  getFeatureMode: GetFeatureMode
+  getFeatureMode: GetFeatureMode,
 ): FeatureResultPayload {
   const { hasGeometry = true } = options
   return {
     datasetNames: [`${options.datasource}:${options.dataset}`],
     hasGeometry,
     getFeatureMode,
-    maxFeatures: options.maxFeatures ?? undefined
+    maxFeatures: options.maxFeatures ?? undefined,
   }
 }

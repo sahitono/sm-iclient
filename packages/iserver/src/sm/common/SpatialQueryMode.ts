@@ -6,5 +6,5 @@ export enum SpatialQueryMode {
   NONE = "NONE",
   OVERLAP = "OVERLAP",
   TOUCH = "TOUCH",
-  WITHIN = "WITHIN"
+  WITHIN = "WITHIN",
 }

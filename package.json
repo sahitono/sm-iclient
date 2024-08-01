@@ -1,25 +1,37 @@
 {
-  "name": "@sm-iclient/monorepo",
-  "version": "0.9.1-alpha.1",
-  "description": "",
-  "main": "index.js",
+  "name": "@sahitono-iclient/monorepo",
   "type": "module",
+  "version": "0.9.1-alpha.1",
+  "packageManager": "pnpm@9.6.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "main": "index.js",
   "scripts": {
     "bundle": "pnpm --stream --parallel --filter \"./packages/**\" bundle",
     "bundle:browser": "pnpm --stream --parallel --filter \"./packages/**\" bundle:browser",
-    "build": "pnpm --stream --parallel --filter \"./packages/**\" build"
+    "build": "pnpm --filter \"./packages/**\" build",
+    "release": "bumpp -r"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "bumpp": "^9.4.0",
-    "esbuild": "^0.19.8",
-    "tsc-alias": "^1.8.8",
-    "typescript": "^5.3.2"
+    "@antfu/eslint-config": "^2.24.1",
+    "@sahitono-iclient/iserver": "workspace:^*",
+    "@sahitono-iclient/ol": "workspace:^*",
+    "bumpp": "^9.4.1",
+    "esbuild": "^0.23.0",
+    "eslint": "^9.8.0",
+    "eslint-plugin-antfu": "^2.3.4",
+    "eslint-plugin-format": "^0.1.2",
+    "pnpm": "^9.6.0",
+    "taze": "^0.16.3",
+    "typescript": "^5.5.4",
+    "unbuild": "^2.0.0"
   },
-  "dependencies": {
-    "@sm-iclient/iserver": "workspace:^*",
-    "@sm-iclient/ol": "workspace:^*"
+  "pnpm": {
+    "overrides": {
+      "radash": "^12.1.0",
+      "@types/geojson": "^7946.0.14"
+    }
   }
 }

@@ -1,5 +1,5 @@
-import type { Rectangle2D } from "../../geometry/Rectangle2D"
-import type { Geometry } from "../../geometry/Geometry"
+import type { Geometry, Rectangle2D } from "../../geometry"
+
 import type { SpatialQueryMode } from "../../common/SpatialQueryMode"
 import type { PrjCoordSys } from "../../common/PrjCoordSys"
 import type { GetFeatureMode } from "./GetFeatureMode"

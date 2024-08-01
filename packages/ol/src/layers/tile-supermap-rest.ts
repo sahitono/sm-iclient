@@ -9,7 +9,7 @@ import TileGrid from "ol/tilegrid/TileGrid"
 
 function getResolutions(extent: number[]) {
   const startResolution = getWidth(extent) / 256
-  const resolutions = new Array<number>(22)
+  const resolutions = Array.from<number>({ length: 22 })
   for (let i = 0, ii = resolutions.length; i < ii; ++i) {
     resolutions[i] = startResolution / 2 ** i
   }
@@ -22,7 +22,7 @@ const MAP_UNIT: Record<string, number> = {
   degrees: (Math.PI * 2 * 6378137) / 360,
   km: 1.0e-3,
   in: 1 / 2.5399999918e-2,
-  ft: 0.3048
+  ft: 0.3048,
 }
 
 export function getMeterPerMapUnit(mapUnit: string) {
@@ -39,7 +39,7 @@ export function createTileGrid(extent: number[], origin?: number[], tileSize = 2
   return new TileGrid({
     resolutions: getResolutions(extent),
     tileSize,
-    origin: origin ?? getCenter(extent)
+    origin: origin ?? getCenter(extent),
   })
 }
 
@@ -55,14 +55,15 @@ export function createTileLayer(url: string, projection: Projection) {
       projection,
       tileGrid,
       format: "png",
-      transparent: true
-    })
+      transparent: true,
+    }),
   })
 }
 
 class TileChangeEvent extends BaseEvent {
+  // @ts-expect-error placeholder
   private value: Record<string, any>
-  constructor(opt: { type: string; value: Record<string, any> }) {
+  constructor(opt: { type: string, value: Record<string, any> }) {
     super(opt.type)
     this.value = opt.value
   }
@@ -83,9 +84,11 @@ export interface Options extends TileOptions {
   overlapDisplayedOptions?: Record<string, unknown>
   tileversion?: string
   extent?: number[]
+  opaque?: boolean
 }
 
 export class TileSuperMapRest extends TileImage {
+  // @ts-expect-error placeholder
   private tileProxy: string | undefined
   public options: Options
   private tileSetsIndex = -1
@@ -96,9 +99,9 @@ export class TileSuperMapRest extends TileImage {
 
   constructor(options: Options) {
     options = options || {}
-    options.attributions =
-      options.attributions ||
-      "Map Data <span>© <a href='http://support.supermap.com.cn/product/iServer.aspx' target='_blank'>SuperMap iServer</a></span> with <span>© <a href='https://iclient.supermap.io' target='_blank'>SuperMap iClient</a></span>"
+    options.attributions
+      = options.attributions
+      || "Map Data <span>© <a href='http://support.supermap.com.cn/product/iServer.aspx' target='_blank'>SuperMap iServer</a></span> with <span>© <a href='https://iclient.supermap.io' target='_blank'>SuperMap iClient</a></span>"
 
     options.format = options?.format ?? "png"
 
@@ -106,7 +109,6 @@ export class TileSuperMapRest extends TileImage {
       attributions: options.attributions,
       cacheSize: options.cacheSize,
       crossOrigin: options.crossOrigin,
-      opaque: options.opaque,
       projection: options.projection,
       reprojectionErrorThreshold: options.reprojectionErrorThreshold,
       state: options.state,
@@ -114,7 +116,7 @@ export class TileSuperMapRest extends TileImage {
       tileGrid: options.tileGrid,
       tileLoadFunction: options.tileLoadFunction,
       tilePixelRatio: options.tilePixelRatio,
-      wrapX: options.wrapX !== undefined ? options.wrapX : false
+      wrapX: options.wrapX !== undefined ? options.wrapX : false,
     })
 
     this.tileProxy = options.tileProxy
@@ -132,7 +134,7 @@ export class TileSuperMapRest extends TileImage {
     this.origin = [o[0], o[1]]
     this.requestParams.origin = JSON.stringify({
       x: o[0],
-      y: o[1]
+      y: o[1],
     })
 
     this.tileUrlFunction = this.tileUrlFunctionSM
@@ -174,7 +176,7 @@ export class TileSuperMapRest extends TileImage {
     if (this.origin) {
       params.origin = JSON.stringify({
         x: this.origin[0],
-        y: this.origin[1]
+        y: this.origin[1],
       })
     }
 
@@ -191,7 +193,8 @@ export class TileSuperMapRest extends TileImage {
       if (this.options.overlapDisplayedOptions) {
         params.overlapDisplayedOptions = JSON.stringify(this.options.overlapDisplayedOptions)
       }
-    } else {
+    }
+    else {
       params.overlapDisplayed = true
     }
 
@@ -220,8 +223,8 @@ export class TileSuperMapRest extends TileImage {
     const scale = resolutionToScale(resolution, this.options.dpi, unit)
     const tileSize = toSize(this.tileGrid!.getTileSize(z))
 
-    let url =
-      this.mapUrl + encodeURI(`&x=${x}&y=${y}&width=${tileSize[0]}&height=${tileSize[1]}&scale=${scale}`)
+    let url
+      = this.mapUrl + encodeURI(`&x=${x}&y=${y}&width=${tileSize[0]}&height=${tileSize[1]}&scale=${scale}`)
 
     if (!this.options.cacheEnabled) {
       url += `&_t=${new Date().getTime()}`
@@ -230,7 +233,7 @@ export class TileSuperMapRest extends TileImage {
   }
 
   setTileSetsInfo(
-    tileSets: Record<string, Record<string, any>> | Array<Record<string, Record<string, any>>>
+    tileSets: Record<string, Record<string, any>> | Array<Record<string, Record<string, any>>>,
   ) {
     if (Array.isArray(tileSets)) {
       this.tileSets = tileSets[0]
@@ -246,9 +249,9 @@ export class TileSuperMapRest extends TileImage {
       new TileChangeEvent({
         type: "tileversionschanged",
         value: {
-          tileVersion: this.tileSets.tileVersions
-        }
-      })
+          tileVersion: this.tileSets.tileVersions,
+        },
+      }),
     )
     this.changeTilesVersion()
   }
@@ -282,9 +285,9 @@ export class TileSuperMapRest extends TileImage {
           new TileChangeEvent({
             type: "tileversionschanged",
             value: {
-              tileVersion: tileVersions[this.tempIndex]
-            }
-          })
+              tileVersion: tileVersions[this.tempIndex],
+            },
+          }),
         )
       }
     }

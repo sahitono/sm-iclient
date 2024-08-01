@@ -1,4 +1,4 @@
-import {Point2D} from "./Point2D";
+import type { Point2D } from "./Point2D"
 
 export interface Bounds {
   top: number
